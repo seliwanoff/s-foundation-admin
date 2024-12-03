@@ -40,7 +40,6 @@ const DashboardWrapper = () => {
       await axiosInstance
         .get(`/admin/monthly-payment-counts${selectedYear}`)
         .then((res) => {
-          console.log(res);
           setPaymentData(res.data.volumeData);
         })
         .catch((e) => {

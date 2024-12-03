@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../api/axiosInstance"; // Axios instance with NProgress
+import { useNavigate } from "react-router-dom";
 
 // Initial state
 const initialState = {
@@ -10,7 +11,6 @@ const initialState = {
   loading: false, // To track loading state
 };
 
-// Async thunk to fetch user data
 export const fetchUserData = createAsyncThunk(
   "auth/fetchUserData",
   async (_, { rejectWithValue }) => {
@@ -24,7 +24,7 @@ export const fetchUserData = createAsyncThunk(
         },
       });
 
-      return response.data; // Assuming response has user data
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
     }
@@ -50,7 +50,6 @@ const authSlice = createSlice({
       state.authToken = null;
       state.error = action.payload;
 
-      // Remove authToken from localStorage in case of failure
       localStorage.removeItem("authToken");
     },
     logout: (state) => {
@@ -59,7 +58,6 @@ const authSlice = createSlice({
       state.authToken = null;
       state.error = null;
 
-      // Clear authToken from localStorage
       localStorage.removeItem("authToken");
     },
   },
@@ -70,7 +68,7 @@ const authSlice = createSlice({
       })
       .addCase(fetchUserData.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload; // Update user data with the fetched data
+        state.user = action.payload;
         state.error = null;
       })
       .addCase(fetchUserData.rejected, (state, action) => {
